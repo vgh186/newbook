@@ -7,7 +7,7 @@ export async function addRecord(record) {
     date: record.date,
     project: record.project,
     college: record.college,
-    transaction: record.remark, // 假设transaction字段对应remark
+    remark: record.remark,
     amount: record.amount,
     type: record.type,
     // 确保添加name字段，如果Supabase中没有，可能需要单独处理
@@ -44,7 +44,7 @@ export async function getRecords() {
       name: item.name,
       project: item.project,
       college: item.college,
-      remark: item.transaction, // 假设transaction字段对应remark
+      remark: item.remark,
       amount: item.amount,
       type: item.type,
       user_id: item.user_id || 'default_user' // 默认用户ID如果没有
