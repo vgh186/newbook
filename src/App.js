@@ -364,6 +364,13 @@ function App() {
               style={{ width: 90 }}
             />
             <input
+              name="remark"
+              placeholder="筛选备注"
+              value={filter.remark}
+              onChange={handleFilterChange}
+              style={{ width: 100 }}
+            />
+            <input
               name="minAmount"
               type="number"
               placeholder="最小金额"
@@ -409,6 +416,13 @@ function App() {
               value={filter.project}
               onChange={handleFilterChange}
               style={{ width: 90 }}
+            />
+            <input
+              name="remark"
+              placeholder="筛选备注"
+              value={filter.remark}
+              onChange={handleFilterChange}
+              style={{ width: 100 }}
             />
             <input
               name="minAmount"
