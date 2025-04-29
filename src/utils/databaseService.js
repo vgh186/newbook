@@ -1,7 +1,7 @@
 // 导入数据库工具
 // 已移除 cloudbaseDB 相关内容
 import { getSupabaseClient } from './supabaseDB';
-import { getDbType } from './dbConfig';
+// 已移除未使用的 getDbType import
 
 // 统一的数据库服务
 export const databaseService = {
