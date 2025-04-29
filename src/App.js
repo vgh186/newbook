@@ -11,6 +11,7 @@ import PaginatedTable from "./components/PaginatedTable";
 import DbMigrationStatus from "./components/DbMigrationStatus";
 
 function App() {
+  const [user, setUser] = useState(null);
   // 页面加载时自动查数据库
   useEffect(() => {
     async function fetchAllRecords() {
