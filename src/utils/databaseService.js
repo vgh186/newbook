@@ -4,10 +4,12 @@ import { getSupabaseClient } from './supabaseDB';
 import { getDbType } from './dbConfig';
 
 // 统一的数据库服务
-// 已移除未使用的变量，确保 ESLint 通过
 export const databaseService = {
   // 查询数据
   async query(collection, query = {}, options = {}) {
+    let results = [];
+    let errors = [];
+
     
     
     
@@ -56,8 +58,8 @@ export const databaseService = {
   // 添加数据
   async add(collection, data) {
     const dbType = getDbType();
-    
-    
+    let result = null;
+    let errors = [];
     
     // 使用Supabase添加
     try {
@@ -80,7 +82,7 @@ export const databaseService = {
   // 更新数据
   async update(collection, id, data) {
     const dbType = getDbType();
-    
+    let success = false;
     const errors = [];
     
     // 使用Supabase更新
@@ -108,7 +110,7 @@ export const databaseService = {
   // 删除数据
   async remove(collection, id) {
     const dbType = getDbType();
-    
+    let success = false;
     const errors = [];
     
     // 使用Supabase删除
@@ -135,7 +137,7 @@ export const databaseService = {
   // 获取单个数据
   async getById(collection, id) {
     const dbType = getDbType();
-    
+    let result = null;
     const errors = [];
     
     // 使用Supabase获取
