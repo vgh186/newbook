@@ -23,7 +23,7 @@ function App() {
     }
     fetchAllRecords();
   }, []);
-  const [user, setUser] = useState(null);
+  
   const [records, setRecords] = useState([]);
   const [form, setForm] = useState({
     date: "",
@@ -48,8 +48,8 @@ function App() {
   });
 
   // 统计类型：日、月、年、季度、自定义区间
-  const [statType, setStatType] = useState('month'); // 默认按月统计
-  const [customRange, setCustomRange] = useState({ start: '', end: '' });
+  
+  
 
   // 新增状态：当前使用的数据库类型
   // 只用 supabase，不再区分 dbType
