@@ -57,7 +57,7 @@ export const databaseService = {
   
   // 添加数据
   async add(collection, data) {
-    const dbType = getDbType();
+    // 已移除未使用的 dbType 变量
     let result = null;
     let errors = [];
     
@@ -81,7 +81,7 @@ export const databaseService = {
   
   // 更新数据
   async update(collection, id, data) {
-    const dbType = getDbType();
+    // 已移除未使用的 dbType 变量
     let success = false;
     const errors = [];
     
@@ -109,7 +109,7 @@ export const databaseService = {
   
   // 删除数据
   async remove(collection, id) {
-    const dbType = getDbType();
+    // 已移除未使用的 dbType 变量
     let success = false;
     const errors = [];
     
@@ -136,7 +136,7 @@ export const databaseService = {
   
   // 获取单个数据
   async getById(collection, id) {
-    const dbType = getDbType();
+    // 已移除未使用的 dbType 变量
     let result = null;
     const errors = [];
     

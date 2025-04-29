@@ -11,7 +11,7 @@ import PaginatedTable from "./components/PaginatedTable";
 import DbMigrationStatus from "./components/DbMigrationStatus";
 
 function App() {
-  const [user, setUser] = useState(null);
+  // 已移除未使用的 user 变量
   // 页面加载时自动查数据库
   useEffect(() => {
     async function fetchAllRecords() {
