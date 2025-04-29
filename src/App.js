@@ -45,7 +45,8 @@ function App() {
     minAmount: '',
     maxAmount: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
+    remark: '' // 新增备注筛选
   });
 
   // 统计类型：日、月、年、季度、自定义区间
@@ -107,7 +108,7 @@ function App() {
   // 新增：筛选输入处理
   function handleFilterChange(e) {
     try {
-    setFilter({ ...filter, [e.target.name]: e.target.value });
+      setFilter({ ...filter, [e.target.name]: e.target.value });
     } catch (error) {
       console.error('筛选功能出错:', error);
       // 如果出错，清空筛选条件
@@ -118,7 +119,8 @@ function App() {
         minAmount: '',
         maxAmount: '',
         startDate: '',
-        endDate: ''
+        endDate: '',
+        remark: '' // 新增备注筛选
       });
     }
   }
@@ -206,6 +208,7 @@ function App() {
         if (filter.name && (!item.name || !item.name.includes(filter.name))) return false;
         if (filter.college && (!item.college || !item.college.includes(filter.college))) return false;
         if (filter.project && (!item.project || !item.project.includes(filter.project))) return false;
+        if (filter.remark && (!item.remark || !item.remark.includes(filter.remark))) return false; // 新增备注筛选
         if (filter.minAmount && Number(item.amount) < Number(filter.minAmount)) return false;
         if (filter.maxAmount && Number(item.amount) > Number(filter.maxAmount)) return false;
         if (filter.startDate && (!item.date || item.date < filter.startDate)) return false;
