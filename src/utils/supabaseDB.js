@@ -8,7 +8,7 @@ let isConnected = false;
 export const initSupabaseDB = async () => {
   try {
     // 验证连接（可自定义表名，或直接select现有业务表）
-    const { data, error } = await supabase.from('records').select('*').limit(1);
+    const { error } = await supabase.from('records').select('*').limit(1);
     if (error) throw error;
     isConnected = true;
     console.log('Supabase数据库连接成功');

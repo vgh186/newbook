@@ -1,13 +1,12 @@
 // 导入数据库工具
 // 已移除 cloudbaseDB 相关内容
 import { getSupabaseClient } from './supabaseDB';
-import { getDbType, DB_TYPE, isUsingSupabase, isUsingCloudbase } from './dbConfig';
 
 // 统一的数据库服务
+// 已移除未使用的变量，确保 ESLint 通过
 export const databaseService = {
   // 查询数据
   async query(collection, query = {}, options = {}) {
-    const dbType = getDbType();
     let results = [];
     let errors = [];
     

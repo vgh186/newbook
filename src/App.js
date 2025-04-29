@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import app from "./utils/cloudbase"; // 已弃用
 import "./App.css";
-import PhoneAuth from "./components/PhoneAuth";
+// import PhoneAuth from './components/PhoneAuth';
 import { addRecord, getRecords, deleteRecord, batchDeleteRecords, batchFixUserId } from "./utils/supabaseRecords"; // 只用 supabase
 import * as XLSX from "xlsx";
 import { MoneyIcon, ExportIcon, UserIcon, LogoutIcon } from "./components/Icons";
@@ -23,7 +23,7 @@ function App() {
     }
     fetchAllRecords();
   }, []);
-  const [user, setUser] = useState(true);
+  // const [user, setUser] = useState(null); // 注释掉未使用的变量
   const [records, setRecords] = useState([]);
   const [form, setForm] = useState({
     date: "",
@@ -48,12 +48,12 @@ function App() {
   });
 
   // 统计类型：日、月、年、季度、自定义区间
-  const [statType, setStatType] = useState('month'); // 默认按月统计
+  // const [statType, setStatType] = useState('month'); // 默认按月统计 // 注释掉未使用的变量
   const [customRange, setCustomRange] = useState({ start: '', end: '' });
 
   // 新增状态：当前使用的数据库类型
   // 只用 supabase，不再区分 dbType
-const currentDbType = 'supabase';
+  // const currentDbType = 'supabase'; // 注释掉未使用的变量
 
   // 新增：统计信息
   function getStats(records) {
