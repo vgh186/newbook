@@ -2,7 +2,6 @@
 // 已移除 cloudbaseDB 相关内容
 import { getSupabaseClient } from './supabaseDB';
 import { getDbType } from './dbConfig';
-import { getDbType } from './dbConfig';
 
 // 统一的数据库服务
 // 已移除未使用的变量，确保 ESLint 通过
