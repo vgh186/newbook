@@ -134,7 +134,7 @@ export default function PaginatedTable({ data, pageSize = 20, onDelete }) {
               <td>{item.name}</td>
               <td>{item.project}</td>
               <td>{item.college}</td>
-              <td>{item.remark}</td>
+              <td>{item.remark || ''}</td>
               <td style={{color:item.type==='收入'?'#e15c5c':'#2ca46d',fontWeight:600}}>{item.amount}</td>
               <td>{item.type}</td>
               <td>
