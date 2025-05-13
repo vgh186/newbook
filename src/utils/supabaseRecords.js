@@ -96,4 +96,14 @@ export async function batchFixUserId(user_id = "default_user") {
     
   if (error) throw error;
   return data.length;
-} 
+}
+
+// 更新账目
+export async function updateRecord(id, data) {
+  const { error } = await supabase
+    .from('records')
+    .update(data)
+    .eq('id', id);
+  if (error) throw error;
+  return true;
+}

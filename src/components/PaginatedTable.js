@@ -1,17 +1,24 @@
 import React, { useState, useRef } from "react";
 import TableFilterDropdown from "./TableFilterDropdown";
 
-export default function PaginatedTable({ data, pageSize = 20, onDelete }) {
+export default function PaginatedTable({ data, pageSize = 20, onDelete, onEdit, page, setPage }) {
   const tableRef = useRef();
-  const [page, setPage] = useState(1);
   const [jump, setJump] = useState("");
-  const [sort, setSort] = useState({ key: '', asc: true });
+  // 默认按日期升序（旧到新）
+  const [sort, setSort] = useState({ key: 'date', asc: true });
   const total = data.length;
   const pageCount = Math.ceil(total / pageSize);
 
   // 筛选状态
   const [filters, setFilters] = useState({}); // {name: ["张三"]}
   const [filterDropdown, setFilterDropdown] = useState({ key: '', anchor: null });
+
+  const [editRow, setEditRow] = useState(null); // 当前编辑的行
+  const [editData, setEditData] = useState({});
+
+  // 页码受控
+  const curPage = page || 1;
+  const setCurPage = setPage || (()=>{});
 
   // 先筛选再排序
   let filteredData = data.filter(row => {
@@ -28,13 +35,17 @@ export default function PaginatedTable({ data, pageSize = 20, onDelete }) {
       if (sort.key === 'amount') {
         va = Number(va) || 0;
         vb = Number(vb) || 0;
+      } else if (sort.key === 'date') {
+        // 日期排序，兼容 2025/3/22 和 2025-03-22
+        va = new Date((va||'').replace(/\//g, '-'));
+        vb = new Date((vb||'').replace(/\//g, '-'));
       }
       if (va < vb) return sort.asc ? -1 : 1;
       if (va > vb) return sort.asc ? 1 : -1;
       return 0;
     });
   }
-  const start = (page - 1) * pageSize;
+  const start = (curPage - 1) * pageSize;
   const end = Math.min(start + pageSize, filteredData.length);
   const pageData = sortedData.slice(start, end);
 
@@ -45,12 +56,12 @@ export default function PaginatedTable({ data, pageSize = 20, onDelete }) {
     // 支持页码或关键字
     if (/^\d+$/.test(val)) {
       let p = Math.max(1, Math.min(pageCount, Number(val)));
-      setPage(p);
+      setCurPage(p);
     } else {
       // 按姓名、项目、备注等模糊查找，跳到第一个匹配项所在页
       const idx = data.findIndex(item => Object.values(item).some(v => String(v).includes(val)));
       if (idx >= 0) {
-        setPage(Math.floor(idx / pageSize) + 1);
+        setCurPage(Math.floor(idx / pageSize) + 1);
       } else {
         alert("未找到相关内容");
       }
@@ -66,7 +77,7 @@ export default function PaginatedTable({ data, pageSize = 20, onDelete }) {
           <button type="submit">跳转</button>
         </form>
         <span style={{marginLeft:16}}>
-          共 {total} 条 | 第 {page} / {pageCount} 页
+          共 {total} 条 | 第 {curPage} / {pageCount} 页
         </span>
       </div>
       <table ref={tableRef} border="1" cellPadding="6" style={{ width: "100%", position:'relative' }}>
@@ -92,7 +103,7 @@ export default function PaginatedTable({ data, pageSize = 20, onDelete }) {
                   } else {
                     setSort({ key: col.key, asc: true });
                   }
-                  setPage(1);
+                  setCurPage(1);
                 } : undefined}
               >
                 <span>{col.label}</span>
@@ -139,21 +150,48 @@ export default function PaginatedTable({ data, pageSize = 20, onDelete }) {
               <td>{item.type}</td>
               <td>
                 {item._id && (
-                  <button onClick={() => onDelete(item._id)}>
-                    删除
-                  </button>
+                  <>
+                    <button onClick={() => onDelete(item._id)} style={{marginRight:8}}>删除</button>
+                    <button onClick={() => { setEditRow(item._id); setEditData(item); }}>编辑</button>
+                  </>
                 )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {/* 编辑弹窗 */}
+      {editRow && (
+        <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'#0005',zIndex:99,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <div style={{background:'#fff',padding:24,borderRadius:10,minWidth:320,boxShadow:'0 2px 16px #0002'}}>
+            <h3 style={{marginTop:0}}>编辑账目</h3>
+            <form onSubmit={e=>{e.preventDefault();onEdit && onEdit(editRow,editData);setEditRow(null);}}>
+              <div style={{display:'flex',flexDirection:'column',gap:10}}>
+                <input value={editData.date||''} onChange={e=>setEditData(d=>({...d,date:e.target.value}))} type="date" required />
+                <input value={editData.name||''} onChange={e=>setEditData(d=>({...d,name:e.target.value}))} placeholder="姓名" required />
+                <input value={editData.project||''} onChange={e=>setEditData(d=>({...d,project:e.target.value}))} placeholder="项目" />
+                <input value={editData.college||''} onChange={e=>setEditData(d=>({...d,college:e.target.value}))} placeholder="学院" />
+                <input value={editData.remark||''} onChange={e=>setEditData(d=>({...d,remark:e.target.value}))} placeholder="备注" />
+                <input value={editData.amount||''} onChange={e=>setEditData(d=>({...d,amount:e.target.value}))} type="number" placeholder="金额" required />
+                <select value={editData.type||'收入'} onChange={e=>setEditData(d=>({...d,type:e.target.value}))}>
+                  <option value="收入">收入</option>
+                  <option value="支出">支出</option>
+                </select>
+              </div>
+              <div style={{marginTop:18,display:'flex',gap:12,justifyContent:'flex-end'}}>
+                <button type="button" onClick={()=>setEditRow(null)}>取消</button>
+                <button type="submit" style={{background:'#409eff',color:'#fff',border:'none',borderRadius:6,padding:'6px 18px'}}>保存</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       <div style={{marginTop:10,display:'flex',gap:8,alignItems:'center',justifyContent:'center'}}>
-        <button onClick={()=>setPage(1)} disabled={page===1}>首页</button>
-        <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1}>上一页</button>
-        <span>第 {page} / {pageCount} 页</span>
-        <button onClick={()=>setPage(p=>Math.min(pageCount,p+1))} disabled={page===pageCount}>下一页</button>
-        <button onClick={()=>setPage(pageCount)} disabled={page===pageCount}>末页</button>
+        <button onClick={()=>setCurPage(1)} disabled={curPage===1}>首页</button>
+        <button onClick={()=>setCurPage(p=>Math.max(1,p-1))} disabled={curPage===1}>上一页</button>
+        <span>第 {curPage} / {pageCount} 页</span>
+        <button onClick={()=>setCurPage(p=>Math.min(pageCount,p+1))} disabled={curPage===pageCount}>下一页</button>
+        <button onClick={()=>setCurPage(pageCount)} disabled={curPage===pageCount}>末页</button>
       </div>
     </div>
   );
